@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>构建指南 - Anoma 中文开发者文档</title>
+    <link rel="icon" type="image/svg+xml" href="iso.svg">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <img src="iso.svg" alt="Anoma" class="nav-icon">
+                    <h1>Anoma 中文开发者门户</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">概述</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="build.html" class="nav-link active">构建</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="learn.html" class="nav-link">学习</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <section class="page-header">
+                <h1>构建</h1>
+                <p class="page-description">开始构建您的第一个 Anoma 应用程序</p>
+            </section>
+
+            <section class="content-section">
+                <h2>快速开始</h2>
+                <p class="intro-text">
+                    在不到 5 分钟内安装 Juvix。Juvix 是 Anoma 用于意图中心化和声明式去中心化应用程序的语言。
+                </p>
+                
+                <div class="highlight-box">
+                    <h3>🚀 快速安装 Juvix</h3>
+                    <p>通过以下选项开始安装 Juvix 编译器到您的系统。我们目前支持：</p>
+                    <ul>
+                        <li>Linux x86_64</li>
+                        <li>macOS x86_64 和 aarch64 (M1/M2)</li>
+                    </ul>
+                    <p><strong>注意：</strong>所有示例应用程序目前兼容 anoma-apps v0.4.1 版本。</p>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2>系统要求</h2>
+                <div class="requirement-box">
+                    <h3>⚠️ 重要前提条件</h3>
+                    <p>Juvix 编译器需要 LLVM/clang 编译器在您的系统 PATH 中可用，以便构建本地二进制文件。</p>
+                </div>
+
+                <div class="install-grid">
+                    <div class="install-card">
+                        <h3>🐧 Ubuntu/Debian</h3>
+                        <p>通过以下命令安装 clang：</p>
+                        <pre><code>sudo apt-get update
+sudo apt install clang</code></pre>
+                    </div>
+                    
+                    <div class="install-card">
+                        <h3>🏔️ Arch Linux</h3>
+                        <p>通过以下命令安装 clang：</p>
+                        <pre><code>sudo pacman -Syu
+sudo pacman -S clang</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2>安装 Juvix 编译器</h2>
+                
+                <div class="install-methods">
+                    <div class="method-card">
+                        <h3>🍺 使用 Homebrew（推荐）</h3>
+                        <p>如果您使用 Homebrew 包管理器，可以使用我们的 tap：</p>
+                        <pre><code>brew update
+brew tap anoma/juvix
+brew install --overwrite juvix-nightly</code></pre>
+                    </div>
+                    
+                    <div class="method-card">
+                        <h3>📦 手动下载</h3>
+                        <p>或者，您可以下载并解压下面链接的编译器可执行文件，然后将其移动到您的 shell PATH 目录中（例如 /usr/local/bin）。</p>
+                        <div class="download-links">
+                            <a href="#" class="btn btn-primary">下载 Linux x86_64</a>
+                            <a href="#" class="btn btn-primary">下载 macOS</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2>IDE 设置</h2>
+                <p>最后，您可以设置您选择的 IDE。</p>
+                
+                <div class="ide-grid">
+                    <div class="ide-card">
+                        <h3>🔵 Visual Studio Code</h3>
+                        <ol>
+                            <li>从 Microsoft 网站安装 Visual Studio Code</li>
+                            <li>在扩展选项卡中搜索 "juvix"</li>
+                            <li>安装带有 Tara 标志的扩展</li>
+                        </ol>
+                        <p>查看 <a href="#">vscode-juvix 仓库</a> 获取使用信息。</p>
+                    </div>
+                    
+                    <div class="ide-card">
+                        <h3>🟣 Emacs</h3>
+                        <p>克隆 juvix-mode 仓库：</p>
+                        <pre><code>git clone https://github.com/anoma/juvix-mode.git</code></pre>
+                        <p>并将以下行添加到您的 Emacs 配置文件中：</p>
+                        <pre><code>(push "/path/to/juvix-mode/" load-path)
+(require 'juvix-mode)</code></pre>
+                        <p>查看 <a href="#">juvix-mode 仓库</a> 获取使用信息。</p>
+                    </div>
+                </div>
+                
+                <div class="note-box">
+                    <p><strong>注意：</strong>我们将持续添加对更多平台和 IDE 的支持。</p>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2>第一个 Anoma 应用程序</h2>
+                <p>现在您已经安装了 Juvix，让我们创建您的第一个 Anoma 应用程序！</p>
+                
+                <div class="tutorial-steps">
+                    <div class="step">
+                        <h3>步骤 1：项目设置</h3>
+                        <p>在终端中输入以下命令来快速完成项目设置：</p>
+                        <pre><code>mkdir HelloWorld
+cd HelloWorld
+juvix init</code></pre>
+                    </div>
+                    
+                    <div class="step">
+                        <h3>步骤 2：配置包文件</h3>
+                        <p>创建 Juvix 项目后，我们需要将 Package.juvix 文件更改为以下内容：</p>
+                        <pre><code>module Package;
+
+import PackageDescription.V2 open;
+
+package : Package :=
+  defaultPackage@{
+    name := "hello-world";
+    dependencies :=
+      [
+        github "anoma" "juvix-stdlib" "v0.11.0";
+        github "anoma" "anoma-applib" "v0.10.1";
+        github "anoma" "juvix-mtl" "v0.3.0";
+      ];
+  };</code></pre>
+                    </div>
+                    
+                    <div class="step">
+                        <h3>步骤 3：定义资源</h3>
+                        <p>让我们从一些 Juvix 代码开始。我们首先定义一个 Anoma 资源。</p>
+                        <a href="tutorial.html" class="btn btn-primary">继续教程</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2>文档资源</h2>
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <h3>📚 Juvix 文档</h3>
+                        <p>完整的 Juvix 语言文档可在以下地址获取：</p>
+                        <a href="https://docs.juvix.org" class="btn btn-secondary" target="_blank">访问 Juvix 文档</a>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <h3>🎯 应用示例</h3>
+                        <p>查看更多 Anoma 应用程序示例：</p>
+                        <a href="#" class="btn btn-secondary">浏览示例</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="next-steps">
+                <h2>下一步</h2>
+                <p>现在您已经设置好了开发环境，准备好深入了解 Anoma 了吗？</p>
+                <div class="cta-buttons">
+                    <a href="tutorial.html" class="btn btn-primary">开始教程</a>
+                    <a href="learn.html" class="btn btn-secondary">学习概念</a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Anoma 开发者文档. 最后更新：3个月前</p>
+        </div>
+    </footer>
+
+    <style>
+        .page-header {
+            text-align: center;
+            padding: 2rem 0;
+            margin-bottom: 3rem;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-description {
+            font-size: 1.2rem;
+            color: #666;
+        }
+        
+        .content-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        
+        .content-section h2 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        .intro-text {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 1.5rem;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        
+        .highlight-box h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .requirement-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        
+        .requirement-box h3 {
+            color: #856404;
+            margin-bottom: 0.5rem;
+        }
+        
+        .install-grid, .ide-grid, .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .install-card, .ide-card, .resource-card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .install-card h3, .ide-card h3, .resource-card h3 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+        
+        .method-card {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .download-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .note-box {
+            background: #e6fffa;
+            border: 1px solid #81e6d9;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        
+        .tutorial-steps {
+            margin: 2rem 0;
+        }
+        
+        .step {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #667eea;
+        }
+        
+        .step h3 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+        
+        .next-steps {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+        }
+        
+        .next-steps h2 {
+            margin-bottom: 1rem;
+        }
+        
+        .next-steps p {
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+    </style>
+</body>
+</html>

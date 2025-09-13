@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>您的第一个 Anoma 应用程序 - Anoma 开发者文档</title>
+    <link rel="icon" type="image/svg+xml" href="iso.svg">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <img src="iso.svg" alt="Anoma" class="nav-icon">
+                    <h1>Anoma 开发者文档</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">概述</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="build.html" class="nav-link active">构建</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="learn.html" class="nav-link">学习</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <section class="page-header">
+                <h1>您的第一个 Anoma 应用程序</h1>
+                <p class="page-description">一个设置您构建、运行和测试第一个 Anoma 应用程序的教程</p>
+            </section>
+
+            <section class="content-section">
+                <div class="prerequisite-box">
+                    <h3>📋 前提条件</h3>
+                    <p>在创建您的第一个 Anoma dApp 之前，请确保已经 <a href="build.html">安装了 Juvix</a>。</p>
+                </div>
+                
+                <div class="goal-box">
+                    <h3>🎯 本教程的目标</h3>
+                    <p>让您的应用程序在本地运行。</p>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2>第一步：定义资源</h2>
+                <p>在下一章中，我们将构建资源对象的脚手架并添加我们的自定义标签。</p>
+                
+                <div class="code-section">
+                    <h3>创建 HelloWorld.juvix</h3>
+                    <p>让我们从一些 Juvix 代码开始。我们首先定义一个 Anoma 资源。</p>
+                    <pre><code>module HelloWorld;
+
+import Stdlib.Prelude open;
+import Anoma.Resource open;
+import Anoma.Transaction open;
+import Anoma.Delta open;
+import Anoma.State open;
+import Anoma.Logic open;
+
+-- 定义 HelloWorld 资源类型
+type HelloWorldResource := mkHelloWorldResource {
+  message : String;
+  owner : PublicKey;
+};
+
+-- 资源逻辑
+helloWorldLogic : Logic HelloWorldResource
+  := mkLogic@{
+    logicFunction := \resource delta -> 
+      case delta of
+        | Create _ -> True
+        | Consume _ -> True
+        | _ -> False;
+  };
+
+-- 创建 HelloWorld 资源的函数
+createHelloWorld (message : String) (owner : PublicKey) : Resource HelloWorldResource
+  := mkResource@{
+    resourceData := mkHelloWorldResource message owner;
+    resourceLogic := helloWorldLogic;
+  };</code></pre>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2>第二步：编写交易函数</h2>
+                <p>现在我们需要编写一个交易函数来创建我们的 HelloWorld 资源。</p>
+                
+                <div class="code-section">
+                    <h3>交易函数实现</h3>
+                    <pre><code>-- 初始化 HelloWorld 资源的交易函数
+initializeHelloWorld (message : String) (owner : PublicKey) : Transaction
+  := mkTransaction@{
+    transactionInputs := [];
+    transactionOutputs := [createHelloWorld message owner];
+    transactionProofs := [];
+  };
+
+-- 更新消息的交易函数
+updateMessage (oldResource : Resource HelloWorldResource) 
+              (newMessage : String) 
+              (owner : PublicKey) : Transaction
+  := mkTransaction@{
+    transactionInputs := [oldResource];
+    transactionOutputs := [createHelloWorld newMessage owner];
+    transactionProofs := [];
+  };</code></pre>
+                </div>
+                
+                <div class="explanation-box">
+                    <h3>💡 代码解释</h3>
+                    <ul>
+                        <li><strong>initializeHelloWorld</strong>：创建一个新的 HelloWorld 资源</li>
+                        <li><strong>updateMessage</strong>：消费旧资源并创建带有新消息的资源</li>
+                        <li><strong>transactionInputs</strong>：要消费的资源列表</li>
+                        <li><strong>transactionOutputs</strong>：要创建的资源列表</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2>第三步：编写投影函数</h2>
+                <p>编写投影函数以允许与应用程序状态进行读取交互。</p>
+                
+                <div class="code-section">
+                    <h3>创建 GetMessage.juvix</h3>
+                    <pre><code>module GetMessage;
+
+import Stdlib.Prelude open;
+import HelloWorld open;
+import Anoma.Resource open;
+import Anoma.State open;
+
+-- 投影函数：获取最新消息
+getLatestMessage (state : State) : Maybe String
+  := case findLatestResource@{HelloWorldResource} state of
+    | nothing -> nothing
+    | just resource -> 
+      case resource of
+        | mkResource (mkHelloWorldResource message _) _ -> just message;
+
+-- 投影函数：获取所有消息历史
+getMessageHistory (state : State) : List String
+  := map (\resource -> 
+    case resource of
+      | mkResource (mkHelloWorldResource message _) _ -> message
+    ) (findAllResources@{HelloWorldResource} state);
+
+-- 投影函数：检查资源所有者
+checkOwnership (state : State) (owner : PublicKey) : Bool
+  := case findLatestResource@{HelloWorldResource} state of
+    | nothing -> False
+    | just resource -> 
+      case resource of
+        | mkResource (mkHelloWorldResource _ resourceOwner) _ -> 
+          owner == resourceOwner;</code></pre>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2>第四步：运行您的应用程序</h2>
+                <p>现在我们已经编写了创建 HelloWorld 资源对象所需的代码，可以创建一个交易来初始化我们的 HelloWorld 资源。</p>
+                
+                <div class="warning-box">
+                    <h3>⚠️ 重要提示</h3>
+                    <p>以下运行 Anoma 客户端和节点的方式是临时的，因此是正在进行的工作区域，特定于当前开发网络阶段。</p>
+                </div>
+                
+                <div class="setup-steps">
+                    <h3>环境设置</h3>
+                    <div class="step">
+                        <h4>1. 获取 Anoma 代码库</h4>
+                        <p>首先，我们需要 Anoma 代码库的本地版本（提交 6a07f590a5a1addb52fa7f6e39dd9315accc93c5），安装其依赖项并编译代码。</p>
+                        <pre><code># 设置 Anoma 路径环境变量
+# 示例：
+# export ANOMA_PATH=~/anoma/anoma
+export ANOMA_PATH=#INSERT_PATH_TO_ANOMA_FOLDER</code></pre>
+                    </div>
+                    
+                    <div class="step">
+                        <h4>2. 安装依赖项</h4>
+                        <p>在创建必要的 makefile 之前，我们需要安装其依赖项。</p>
+                        
+                        <div class="install-tabs">
+                            <div class="tab-content">
+                                <h5>🍺 Homebrew</h5>
+                                <pre><code>brew install jq
+brew install yq
+brew install grpcurl</code></pre>
+                            </div>
+                            
+                            <div class="tab-content">
+                                <h5>🐧 Ubuntu/Debian</h5>
+                                <pre><code># jq
+sudo apt-get install jq
+# yq
+sudo add-apt-repository ppa:rmescandon/yq
+sudo apt update
+sudo apt install yq -y
+# grpcurl
+# 请从源码构建：https://github.com/fullstorydev/grpcurl/releases</code></pre>
+                            </div>
+                            
+                            <div class="tab-content">
+                                <h5>🏔️ Arch Linux</h5>
+                                <pre><code>sudo pacman -S jq
+sudo pacman -S yq
+# 请从源码构建 grpcurl：https://github.com/fullstorydev/grpcurl/releases</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <h4>3. 创建 Makefile</h4>
+                        <p>假设您已经成功编译了 Anoma 代码库并安装了上述依赖项，现在可以使用以下 makefile 来启动 Anoma 客户端和 Anoma 节点。</p>
+                        <div class="note-box">
+                            <p><strong>注意：</strong>请注意，makefile 是临时的，是当前开发网络阶段的产物。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2>第五步：测试应用程序</h2>
+                <div class="test-steps">
+                    <div class="test-step">
+                        <h3>启动 Anoma 节点</h3>
+                        <pre><code>make anoma-start</code></pre>
+                    </div>
+                    
+                    <div class="test-step">
+                        <h3>添加交易</h3>
+                        <pre><code>make add-transaction</code></pre>
+                    </div>
+                    
+                    <div class="test-step">
+                        <h3>获取最新消息</h3>
+                        <pre><code>make get-last-message</code></pre>
+                    </div>
+                    
+                    <div class="test-step">
+                        <h3>停止 Anoma 节点</h3>
+                        <pre><code>make anoma-stop</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2>恭喜！🎉</h2>
+                <p>您已经成功创建并运行了您的第一个 Anoma 应用程序！这个简单的 HelloWorld 示例展示了：</p>
+                
+                <div class="achievement-list">
+                    <div class="achievement">
+                        <h4>✅ 资源定义</h4>
+                        <p>如何定义自定义资源类型和逻辑</p>
+                    </div>
+                    
+                    <div class="achievement">
+                        <h4>✅ 交易函数</h4>
+                        <p>如何编写创建和更新资源的交易函数</p>
+                    </div>
+                    
+                    <div class="achievement">
+                        <h4>✅ 投影函数</h4>
+                        <p>如何编写查询应用程序状态的投影函数</p>
+                    </div>
+                    
+                    <div class="achievement">
+                        <h4>✅ 本地运行</h4>
+                        <p>如何在本地环境中运行和测试应用程序</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="next-steps">
+                <h2>下一步</h2>
+                <p>现在您已经掌握了基础知识，准备探索更高级的概念了吗？</p>
+                <div class="cta-buttons">
+                    <a href="learn.html" class="btn btn-primary">学习高级概念</a>
+                    <a href="#" class="btn btn-secondary">查看更多示例</a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Anoma 开发者文档. 最后更新：3个月前</p>
+        </div>
+    </footer>
+
+    <style>
+        .prerequisite-box, .goal-box {
+            background: #e6fffa;
+            border: 1px solid #81e6d9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        .prerequisite-box h3, .goal-box h3 {
+            color: #234e52;
+            margin-bottom: 0.5rem;
+        }
+        
+        .code-section {
+            margin: 2rem 0;
+        }
+        
+        .code-section h3 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+        
+        .explanation-box {
+            background: #f0f9ff;
+            border: 1px solid #7dd3fc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        
+        .explanation-box h3 {
+            color: #0c4a6e;
+            margin-bottom: 1rem;
+        }
+        
+        .explanation-box ul {
+            margin-left: 1.5rem;
+        }
+        
+        .explanation-box li {
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        
+        .warning-box h3 {
+            color: #856404;
+            margin-bottom: 0.5rem;
+        }
+        
+        .setup-steps {
+            margin: 2rem 0;
+        }
+        
+        .step {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #667eea;
+        }
+        
+        .step h4 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+        
+        .install-tabs {
+            margin: 1rem 0;
+        }
+        
+        .tab-content {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+        
+        .tab-content h5 {
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .test-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .test-step {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .test-step h3 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .achievement-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .achievement {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .achievement h4 {
+            color: #166534;
+            margin-bottom: 0.5rem;
+        }
+        
+        .achievement p {
+            color: #374151;
+            font-size: 0.9rem;
+        }
+    </style>
+</body>
+</html>

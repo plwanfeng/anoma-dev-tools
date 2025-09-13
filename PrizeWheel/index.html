@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anoma转盘统计器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid #e1e5e9;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .language-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .lang-btn.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: #667eea;
+        }
+        
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 15px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border-left: 5px solid;
+        }
+
+        .stat-card.white {
+            border-left-color: #6c757d;
+        }
+
+        .stat-card.blue {
+            border-left-color: #007bff;
+        }
+
+        .stat-card.red {
+            border-left-color: #dc3545;
+        }
+
+        .stat-card.gold {
+            border-left-color: #ffc107;
+        }
+
+        .ball-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .ball-icon.white {
+            background: #6c757d;
+        }
+
+        .ball-icon.blue {
+            background: #007bff;
+        }
+
+        .ball-icon.red {
+            background: #dc3545;
+        }
+
+        .ball-icon.gold {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .stat-probability {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .total-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .total-info h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .total-info .total-number {
+            font-size: 3em;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 1px solid #f5c6cb;
+        }
+
+        .tutorial-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e1e5e9;
+        }
+        
+        .tutorial-section h2 {
+            color: #333;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .tutorial-steps {
+            margin-bottom: 30px;
+        }
+        
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        
+        .step-content h3 {
+            color: #333;
+            font-size: 1.2em;
+            margin-bottom: 8px;
+        }
+        
+        .step-content p {
+            color: #666;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .step-content a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .step-content a:hover {
+            text-decoration: underline;
+        }
+        
+        kbd {
+            background: #f1f3f4;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            color: #3c4043;
+            font-family: monospace;
+            font-size: 0.9em;
+            padding: 2px 6px;
+        }
+        
+        .tutorial-image {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .tutorial-image h3 {
+            color: #333;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+        
+        .token-screenshot {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid #e1e5e9;
+        }
+        
+        .image-caption {
+            color: #666;
+            font-style: italic;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .step {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .step-number {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="language-switch">
+                <button class="lang-btn active" onclick="switchLanguage('zh')" data-lang="zh">中文</button>
+                <button class="lang-btn" onclick="switchLanguage('en')" data-lang="en">English</button>
+            </div>
+            <h1><svg class="header-icon" width='31' height='31' viewBox='0 0 31 31' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M14.9376 29.386C14.9376 29.9967 14.4033 30.4547 13.8116 30.3975C6.21605 29.6341 0.261719 23.2027 0.261719 15.3972C0.261719 7.59165 6.19696 1.16021 13.8116 0.396837C14.4223 0.339584 14.9376 0.816694 14.9376 1.40831V6.58018C14.9376 7.07637 14.575 7.51532 14.0788 7.59165C10.3192 8.18327 7.43745 11.4467 7.43745 15.3781C7.43745 19.3095 10.3192 22.5729 14.0788 23.1645C14.575 23.2409 14.9376 23.6798 14.9376 24.176V29.386Z' fill='#ffffff'/><path d='M30.3396 16.8287C29.6716 23.9281 24.0608 29.6152 16.9805 30.3786C16.3698 30.4358 15.8354 29.9778 15.8354 29.3671V24.1762C15.8354 23.68 16.1981 23.2601 16.6752 23.1647C19.9958 22.5922 22.6104 19.9203 23.1066 16.5806C23.1829 16.0844 23.6219 15.7218 24.1181 15.7218H29.2899C29.9197 15.7027 30.3968 16.2371 30.3396 16.8287Z' fill='#ffffff'/><path d='M14.9565 8.60324V14.6721C14.9565 15.2446 15.4146 15.7026 15.9871 15.7026H22.1323C22.743 15.7026 23.2201 15.1683 23.1437 14.5576C22.7048 10.8934 20.1475 8.04979 16.1016 7.59177C15.4909 7.51543 14.9565 7.99254 14.9565 8.60324Z' fill='#ffffff'/><path d='M22.1699 1.37004C22.1699 1.75173 22.3799 2.09525 22.7043 2.28609C25.0898 3.64108 27.0746 5.62586 28.4296 8.01141C28.6204 8.33584 28.964 8.54577 29.3457 8.54577H29.3647C29.9373 8.54577 30.4144 8.06866 30.4144 7.49613V1.35096C30.4144 0.778425 29.9373 0.301315 29.3647 0.301315H23.2196C22.647 0.3204 22.1699 0.778425 22.1699 1.37004Z' fill='#ffffff'/></svg><span data-i18n="title">Anoma抽奖统计器</span></h1>
+            <p data-i18n="subtitle1">输入您的Token查看</p>
+            <p data-i18n="subtitle2">你是非酋还是天选之子呢？</p>
+        </div>
+        
+        <div class="content">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="token" data-i18n="token-label">Bearer Token:</label>
+                    <input type="text" id="token" data-i18n-placeholder="token-placeholder" placeholder="请输入您的Bearer Token">
+                </div>
+                <button class="btn" onclick="fetchGaraponData()" data-i18n="start-btn">🎯 开始统计</button>
+            </div>
+            
+            <div id="loading" class="loading" style="display: none;">
+                <p data-i18n="loading">🔄 正在获取数据...</p>
+            </div>
+            
+            <div id="error" class="error" style="display: none;"></div>
+            
+            <div id="results" class="results">
+                <div class="total-info">
+                    <h3 data-i18n="total-draws">总抽奖次数</h3>
+                    <div class="total-number" id="totalCount">0</div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card white">
+                        <div class="ball-icon white">⚪</div>
+                        <div class="stat-number" id="whiteCount">0</div>
+                        <div class="stat-label" data-i18n="white-ball">白球 (100)</div>
+                        <div class="stat-probability" id="whiteProbability">0%</div>
+                    </div>
+                    
+                    <div class="stat-card blue">
+                        <div class="ball-icon blue">🔵</div>
+                        <div class="stat-number" id="blueCount">0</div>
+                        <div class="stat-label" data-i18n="blue-ball">蓝球 (2500)</div>
+                        <div class="stat-probability" id="blueProbability">0%</div>
+                    </div>
+                    
+                    <div class="stat-card red">
+                        <div class="ball-icon red">🔴</div>
+                        <div class="stat-number" id="redCount">0</div>
+                        <div class="stat-label" data-i18n="red-ball">红球 (10000)</div>
+                        <div class="stat-probability" id="redProbability">0%</div>
+                    </div>
+                    
+                    <div class="stat-card gold">
+                        <div class="ball-icon gold">🟡</div>
+                        <div class="stat-number" id="goldCount">0</div>
+                        <div class="stat-label" data-i18n="gold-ball">金球 (50000)</div>
+                        <div class="stat-probability" id="goldProbability">0%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Token获取教程 -->
+            <div class="tutorial-section">
+                <h2 data-i18n="tutorial-title">📖 如何获取Bearer Token</h2>
+                <div class="tutorial-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3 data-i18n="step1-title">登录Anoma测试网</h3>
+                            <p data-i18n="step1-desc">首先访问 <a href="https://testnet.anoma.net" target="_blank">https://testnet.anoma.net</a> 并完成登录</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3 data-i18n="step2-title">打开开发者工具</h3>
+                            <p data-i18n="step2-desc">按键盘的 <kbd>F12</kbd> 键打开浏览器开发者工具</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3 data-i18n="step3-title">切换到Network栏目</h3>
+                            <p data-i18n="step3-desc">在开发者工具中找到并点击 <strong>Network</strong> (网络) 标签页</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3 data-i18n="step4-title">刷新网页</h3>
+                            <p data-i18n="step4-desc">按 <kbd>F5</kbd> 或 <kbd>Ctrl+R</kbd> 刷新页面，让Network面板捕获网络请求</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h3 data-i18n="step5-title">查找user请求</h3>
+                            <p data-i18n="step5-desc">在Network面板的请求列表中找到名为 <strong>user</strong> 的请求并点击</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <h3 data-i18n="step6-title">复制Bearer Token</h3>
+                            <p data-i18n="step6-desc">在请求详情的Headers部分，找到 <strong>Authorization</strong> 字段，复制 <strong>Bearer</strong> 后面的完整内容</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">7</div>
+                        <div class="step-content">
+                            <h3 data-i18n="step7-title">填写到网站</h3>
+                            <p data-i18n="step7-desc">将复制的Token粘贴到上方的输入框中，点击"开始统计"即可</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tutorial-image">
+                    <h3 data-i18n="screenshot-title">📷 参考截图</h3>
+                    <img src="token.png" alt="获取Token示例图" class="token-screenshot">
+                    <p class="image-caption" data-i18n="disclaimer">本网站由中文开发者社区提供，网站采用官方API接口查询，女巫概不负责</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function fetchGaraponData() {
+            const token = document.getElementById('token').value.trim();
+            
+            if (!token) {
+                const errorMsg = currentLanguage === 'zh' ? '请输入Bearer Token' : 'Please enter Bearer Token';
+                showError(errorMsg);
+                return;
+            }
+            
+            // 显示加载状态
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+            
+            try {
+                const response = await fetch('https://api.prod.testnet.anoma.net/api/v1/garapon', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36',
+                        'Accept': '*/*',
+                        'Origin': 'https://testnet.anoma.net',
+                        'Referer': 'https://testnet.anoma.net/',
+                        'sec-ch-ua': '"Not;A=Brand";v="99", "Google Chrome";v="139", "Chromium";v="139"',
+                        'sec-ch-ua-mobile': '?0',
+                        'sec-ch-ua-platform': '"Windows"',
+                        'Sec-Fetch-Site': 'same-site',
+                        'Sec-Fetch-Mode': 'cors',
+                        'Sec-Fetch-Dest': 'empty',
+                        'Accept-Language': 'zh-CN,zh;q=0.9',
+                        'Accept-Encoding': 'gzip, deflate, br, zstd'
+                    }
+                });
+                
+                if (!response.ok) {
+                    const errorMsg = currentLanguage === 'zh' ? `HTTP ${response.status}: ${response.statusText}` : `HTTP ${response.status}: ${response.statusText}`;
+                    throw new Error(errorMsg);
+                }
+                
+                const data = await response.json();
+                console.log('API响应数据:', data);
+                
+                // 统计数据
+                analyzeData(data);
+                
+            } catch (error) {
+                console.error('请求失败:', error);
+                const errorPrefix = currentLanguage === 'zh' ? '请求失败: ' : 'Request failed: ';
+                showError(`${errorPrefix}${error.message}`);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+        
+        function analyzeData(data) {
+            // 初始化计数器
+            let totalCount = 0;
+            let whiteCount = 0;  // 100
+            let blueCount = 0;   // 2500
+            let redCount = 0;    // 10000
+            let goldCount = 0;   // 50000
+            
+            // 检查数据结构并统计
+            if (Array.isArray(data)) {
+                // 如果返回的是数组
+                totalCount = data.length;
+                data.forEach(item => {
+                    if (item.prize_amount) {
+                        categorizeByPrizeAmount(item.prize_amount);
+                    }
+                });
+            } else if (data && typeof data === 'object') {
+                // 检查是否有 coupons 字段（根据实际API响应）
+                if (Array.isArray(data.coupons)) {
+                    totalCount = data.coupons.length;
+                    data.coupons.forEach(item => {
+                        if (item.prize_amount) {
+                            categorizeByPrizeAmount(item.prize_amount);
+                        }
+                    });
+                } else {
+                    // 如果返回的是对象，查找可能包含数组的字段
+                    const possibleArrayFields = ['data', 'items', 'results', 'garapons', 'prizes'];
+                    let foundArray = null;
+                    
+                    for (const field of possibleArrayFields) {
+                        if (Array.isArray(data[field])) {
+                            foundArray = data[field];
+                            break;
+                        }
+                    }
+                    
+                    if (foundArray) {
+                        totalCount = foundArray.length;
+                        foundArray.forEach(item => {
+                            if (item.prize_amount) {
+                                categorizeByPrizeAmount(item.prize_amount);
+                            }
+                        });
+                    } else {
+                        // 如果没有找到数组，检查是否有单个项目
+                        if (data.prize_amount) {
+                            totalCount = 1;
+                            categorizeByPrizeAmount(data.prize_amount);
+                        } else {
+                            const errorMsg = currentLanguage === 'zh' ? '未找到有效的抽奖数据' : 'No valid lottery data found';
+                            showError(errorMsg);
+                            return;
+                        }
+                    }
+                }
+            } else {
+                    const errorMsg = currentLanguage === 'zh' ? '返回的数据格式不正确' : 'Invalid data format returned';
+                    showError(errorMsg);
+                    return;
+                }
+            
+            function categorizeByPrizeAmount(prizeAmount) {
+                switch (prizeAmount) {
+                    case 100:
+                        whiteCount++;
+                        break;
+                    case 2500:
+                        blueCount++;
+                        break;
+                    case 10000:
+                        redCount++;
+                        break;
+                    case 50000:
+                        goldCount++;
+                        break;
+                }
+            }
+            
+            // 计算概率
+            const whiteProbability = totalCount > 0 ? ((whiteCount / totalCount) * 100).toFixed(2) : 0;
+            const blueProbability = totalCount > 0 ? ((blueCount / totalCount) * 100).toFixed(2) : 0;
+            const redProbability = totalCount > 0 ? ((redCount / totalCount) * 100).toFixed(2) : 0;
+            const goldProbability = totalCount > 0 ? ((goldCount / totalCount) * 100).toFixed(2) : 0;
+            
+            // 更新UI
+            document.getElementById('totalCount').textContent = totalCount;
+            document.getElementById('whiteCount').textContent = whiteCount;
+            document.getElementById('blueCount').textContent = blueCount;
+            document.getElementById('redCount').textContent = redCount;
+            document.getElementById('goldCount').textContent = goldCount;
+            
+            document.getElementById('whiteProbability').textContent = `${whiteProbability}%`;
+            document.getElementById('blueProbability').textContent = `${blueProbability}%`;
+            document.getElementById('redProbability').textContent = `${redProbability}%`;
+            document.getElementById('goldProbability').textContent = `${goldProbability}%`;
+            
+            // 显示结果
+            document.getElementById('results').style.display = 'block';
+        }
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+        
+        // 语言切换功能
+        const translations = {
+            zh: {
+                'title': 'Anoma抽奖统计器',
+                'subtitle1': '输入您的Token查看',
+                'subtitle2': '你是非酋还是天选之子呢？',
+                'token-label': 'Bearer Token:',
+                'token-placeholder': '请输入您的Bearer Token',
+                'start-btn': '🎯 开始统计',
+                'total-draws': '总抽奖次数',
+                'white-ball': '白球 (100)',
+                'blue-ball': '蓝球 (2500)',
+                'red-ball': '红球 (10000)',
+                'gold-ball': '金球 (50000)',
+                'tutorial-title': '📖 如何获取Bearer Token',
+                'step1-title': '登录Anoma测试网',
+                'step1-desc': '首先访问 <a href="https://testnet.anoma.net" target="_blank">https://testnet.anoma.net</a> 并完成登录',
+                'step2-title': '打开开发者工具',
+                'step2-desc': '按键盘的 <kbd>F12</kbd> 键打开浏览器开发者工具',
+                'step3-title': '切换到Network栏目',
+                'step3-desc': '在开发者工具中找到并点击 <strong>Network</strong> (网络) 标签页',
+                'step4-title': '刷新网页',
+                'step4-desc': '按 <kbd>F5</kbd> 或 <kbd>Ctrl+R</kbd> 刷新页面，让Network面板捕获网络请求',
+                'step5-title': '查找user请求',
+                'step5-desc': '在Network面板的请求列表中找到名为 <strong>user</strong> 的请求并点击',
+                'step6-title': '复制Bearer Token',
+                'step6-desc': '在请求详情的Headers部分，找到 <strong>Authorization</strong> 字段，复制 <strong>Bearer</strong> 后面的完整内容',
+                'step7-title': '填写到网站',
+                'step7-desc': '将复制的Token粘贴到上方的输入框中，点击"开始统计"即可',
+                'screenshot-title': '📷 参考截图',
+                'disclaimer': '本网站由中文开发者社区提供，网站采用官方API接口查询，女巫概不负责',
+                'loading': '🔄 正在获取数据...'
+            },
+            en: {
+                'title': 'Anoma Lottery Statistics',
+                'subtitle1': 'Enter your Token to view',
+                'subtitle2': 'Are you unlucky or the chosen one?',
+                'token-label': 'Bearer Token:',
+                'token-placeholder': 'Please enter your Bearer Token',
+                'start-btn': '🎯 Start Statistics',
+                'total-draws': 'Total Draws',
+                'white-ball': 'White Ball (100)',
+                'blue-ball': 'Blue Ball (2500)',
+                'red-ball': 'Red Ball (10000)',
+                'gold-ball': 'Gold Ball (50000)',
+                'tutorial-title': '📖 How to Get Bearer Token',
+                'step1-title': 'Login to Anoma Testnet',
+                'step1-desc': 'First visit <a href="https://testnet.anoma.net" target="_blank">https://testnet.anoma.net</a> and complete login',
+                'step2-title': 'Open Developer Tools',
+                'step2-desc': 'Press <kbd>F12</kbd> key to open browser developer tools',
+                'step3-title': 'Switch to Network Tab',
+                'step3-desc': 'Find and click the <strong>Network</strong> tab in developer tools',
+                'step4-title': 'Refresh Page',
+                'step4-desc': 'Press <kbd>F5</kbd> or <kbd>Ctrl+R</kbd> to refresh the page and let Network panel capture requests',
+                'step5-title': 'Find user Request',
+                'step5-desc': 'Find and click the request named <strong>user</strong> in the Network panel request list',
+                'step6-title': 'Copy Bearer Token',
+                'step6-desc': 'In the request details Headers section, find the <strong>Authorization</strong> field and copy the complete content after <strong>Bearer</strong>',
+                'step7-title': 'Fill in Website',
+                'step7-desc': 'Paste the copied Token into the input box above and click "Start Statistics"',
+                'screenshot-title': '📷 Reference Screenshot',
+                'disclaimer': 'This website is provided by the Chinese developer community, using official API interface queries, no responsibility for witches',
+                'loading': '🔄 Loading data...'
+            }
+        };
+        
+        let currentLanguage = 'zh';
+        
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            
+            // 更新按钮状态
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // 更新文本内容
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+            
+            // 更新placeholder
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-i18n-placeholder');
+                if (translations[lang] && translations[lang][key]) {
+                    element.placeholder = translations[lang][key];
+                }
+            });
+        }
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+        
+        function getLocalizedText(key) {
+            return translations[currentLanguage] && translations[currentLanguage][key] ? translations[currentLanguage][key] : key;
+        }
+        
+        // 允许按Enter键提交
+        document.getElementById('token').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                fetchGaraponData();
+            }
+        });
+    </script>
+</body>
+</html>

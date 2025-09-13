@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anoma 中文开发者门户 - Web3的意图中心化操作系统</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 备用字体样式 */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', '微软雅黑', Roboto, Arial, sans-serif !important;
+        }
+        /* 确保基础样式正确加载 */
+        * {
+            box-sizing: border-box;
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="iso.svg" alt="Anoma Logo" class="logo-icon">
+                <h2>Anoma 中文开发者门户</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="anoma-ecosystem-navigator/index.html" class="nav-link">生态导航</a>
+                </li>
+                <li class="nav-item">
+                    <a href="anoma-dev-tools/index.html" class="nav-link">开发者工具</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主页面 -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Web3的<span class="gradient-text">意图中心化</span><br>
+                    分布式操作系统
+                </h1>
+                <p class="hero-description">
+                    Anoma统一底层区块链为单一开发环境，结束了限制当今去中心化应用的状态和用户碎片化问题。
+                    构建真正以用户为中心的应用，让区块链为人类服务。
+                </p>
+                <div class="hero-buttons">
+                    <a href="#features" class="btn btn-primary">
+                        <i class="fas fa-rocket"></i>
+                        探索特性
+                    </a>
+                    <a href="https://github.com/anoma/anoma" target="_blank" class="btn btn-secondary">
+                        <i class="fab fa-github"></i>
+                        查看代码
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-card">
+                    <div class="card-header">
+                        <div class="card-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="intent-example">
+                            <div class="intent-input">
+                                <i class="fas fa-user"></i>
+                                <span>用户意图: "用最低费用将1 ETH换成USDC"</span>
+                            </div>
+                            <div class="intent-arrow">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="intent-processing">
+                                <i class="fas fa-cogs"></i>
+                                <span>Anoma自动处理跨链交易...</span>
+                            </div>
+                            <div class="intent-arrow">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="intent-result">
+                                <i class="fas fa-check-circle"></i>
+                                <span>交易完成！</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心特性 -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>核心特性</h2>
+                <p>Anoma重新定义去中心化应用的构建和使用方式</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-centric"></i>
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                            <circle cx="30" cy="30" r="25" stroke="#6366f1" stroke-width="2" fill="none"/>
+                            <circle cx="30" cy="25" r="8" stroke="#6366f1" stroke-width="2" fill="none"/>
+                            <path d="M15 45c0-8 7-15 15-15s15 7 15 15" stroke="#6366f1" stroke-width="2" fill="none"/>
+                        </svg>
+                    </div>
+                    <h3>用户中心化</h3>
+                    <p>将用户置于区块链体验的中心，抽象化底层基础设施的复杂性，创造更人性化的界面。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                            <rect x="10" y="15" width="15" height="30" rx="2" stroke="#10b981" stroke-width="2" fill="none"/>
+                            <rect x="35" y="20" width="15" height="25" rx="2" stroke="#10b981" stroke-width="2" fill="none"/>
+                            <path d="M25 30h10" stroke="#10b981" stroke-width="2"/>
+                            <path d="M30 25v10" stroke="#10b981" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <h3>兼容任何链</h3>
+                    <p>通过一次部署访问Anoma连接的任何链上的用户、状态和结算功能。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                            <circle cx="20" cy="20" r="8" stroke="#f59e0b" stroke-width="2" fill="none"/>
+                            <circle cx="40" cy="20" r="8" stroke="#f59e0b" stroke-width="2" fill="none"/>
+                            <circle cx="30" cy="40" r="8" stroke="#f59e0b" stroke-width="2" fill="none"/>
+                            <path d="M26 26l8 8" stroke="#f59e0b" stroke-width="2"/>
+                            <path d="M34 26l-8 8" stroke="#f59e0b" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <h3>完全可组合</h3>
+                    <p>在意图层面而非交易层面组合交互，统一连接链之间的状态。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                            <path d="M10 30c0-11 9-20 20-20s20 9 20 20-9 20-20 20" stroke="#ef4444" stroke-width="2" fill="none"/>
+                            <path d="M30 15v30" stroke="#ef4444" stroke-width="2"/>
+                            <path d="M15 30h30" stroke="#ef4444" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <h3>独特表达力</h3>
+                    <p>表达任何用户意图，创建完全去中心化的任意应用类型。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                            <path d="M15 45L30 15L45 45" stroke="#8b5cf6" stroke-width="2" fill="none"/>
+                            <path d="M22 35h16" stroke="#8b5cf6" stroke-width="2"/>
+                            <circle cx="30" cy="15" r="3" fill="#8b5cf6"/>
+                        </svg>
+                    </div>
+                    <h3>无限扩展</h3>
+                    <p>由于Anoma独特的可扩展性方法，可以扩展到物理定律允许的程度。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                            <rect x="15" y="20" width="30" height="20" rx="3" stroke="#06b6d4" stroke-width="2" fill="none"/>
+                            <circle cx="25" cy="30" r="3" stroke="#06b6d4" stroke-width="2" fill="none"/>
+                            <path d="M35 27v6" stroke="#06b6d4" stroke-width="2"/>
+                            <path d="M20 15v5" stroke="#06b6d4" stroke-width="2"/>
+                            <path d="M30 15v5" stroke="#06b6d4" stroke-width="2"/>
+                            <path d="M40 15v5" stroke="#06b6d4" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <h3>可编程数据主权</h3>
+                    <p>控制与谁共享什么数据以及用于什么目的，赋予用户对自己数据的完全主权。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 技术优势 -->
+    <section id="technology" class="technology">
+        <div class="container">
+            <div class="section-header">
+                <h2>技术创新</h2>
+                <p>从虚拟机到意图机器的革命性转变</p>
+            </div>
+            <div class="tech-comparison">
+                <div class="comparison-card">
+                    <div class="card-header old">
+                        <h3>传统区块链</h3>
+                        <span class="tag">交易中心化</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="tech-item">
+                            <i class="fas fa-times-circle"></i>
+                            <span>用户需要理解复杂的交易流程</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fas fa-times-circle"></i>
+                            <span>多链操作需要多次签名</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fas fa-times-circle"></i>
+                            <span>状态和流动性碎片化</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fas fa-times-circle"></i>
+                            <span>扩展性受限</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="comparison-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                <div class="comparison-card">
+                    <div class="card-header new">
+                        <h3>Anoma</h3>
+                        <span class="tag">意图中心化</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="tech-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>用户只需表达想要的结果</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>一次操作跨所有连接的链</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>统一的状态和流动性</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>无限扩展能力</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 生态系统 -->
+    <section id="ecosystem" class="ecosystem">
+        <div class="container">
+            <div class="section-header">
+                <h2>应用生态</h2>
+                <p>基于意图的全新应用类型</p>
+            </div>
+            <div class="ecosystem-grid">
+                <div class="ecosystem-card">
+                    <div class="card-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <h3>去中心化交易所</h3>
+                    <p>完全去中心化的订单簿交易所，支持跨链原子交换和最优价格发现。</p>
+                </div>
+                <div class="ecosystem-card">
+                    <div class="card-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>社交应用</h3>
+                    <p>去中心化的Slack/Discord替代品，具有完全的数据主权和隐私保护。</p>
+                </div>
+                <div class="ecosystem-card">
+                    <div class="card-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>匹配应用</h3>
+                    <p>各种类型的配对服务，从约会到工作匹配，都具有隐私保护功能。</p>
+                </div>
+                <div class="ecosystem-card">
+                    <div class="card-icon">
+                        <i class="fas fa-donate"></i>
+                    </div>
+                    <h3>众筹平台</h3>
+                    <p>创新的去中心化筹款机制，支持复杂的资金分配和治理模式。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 社区 -->
+    <section id="community" class="community">
+        <div class="container">
+            <div class="section-header">
+                <h2>加入社区</h2>
+                <p>与全球开发者一起构建Web3的未来</p>
+            </div>
+            <div class="community-grid">
+                <a href="https://github.com/anoma/anoma" target="_blank" class="community-card">
+                    <div class="card-icon">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <h3>GitHub</h3>
+                    <p>查看源代码，提交问题，参与开发</p>
+                </a>
+                <a href="https://discord.gg/anoma" target="_blank" class="community-card">
+                    <div class="card-icon">
+                        <i class="fab fa-discord"></i>
+                    </div>
+                    <h3>Discord</h3>
+                    <p>开发者讨论，社区辩论，测试网更新</p>
+                </a>
+                <a href="https://x.com/anoma" target="_blank" class="community-card">
+                    <div class="card-icon">
+                        <i class="fab fa-twitter"></i>
+                    </div>
+                    <h3>Twitter</h3>
+                    <p>最新公告，生态系统动态</p>
+                </a>
+                <a href="https://anoma.net/blog" target="_blank" class="community-card">
+                    <div class="card-icon">
+                        <i class="fas fa-blog"></i>
+                    </div>
+                    <h3>博客</h3>
+                    <p>深度见解，协议升级，治理提案</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Anoma 中文开发者门户</h3>
+                    <p>专注于Anoma生态系统的开发者资源与工具平台</p>
+                    <div class="social-links">
+                        <a href="https://github.com/anoma/anoma" target="_blank">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://x.com/anoma" target="_blank">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://discord.gg/anoma" target="_blank">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>资源</h4>
+                    <ul>
+                        <li><a href="https://anoma.net" target="_blank">官方网站</a></li>
+                        <li><a href="https://github.com/anoma/developer-docs" target="_blank">开发者文档</a></li>
+                        <li><a href="https://anoma.net/blog" target="_blank">博客</a></li>
+                        <li><a href="https://github.com/anoma/anoma" target="_blank">GitHub</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>社区</h4>
+                    <ul>
+                        <li><a href="https://discord.gg/anoma" target="_blank">Discord</a></li>
+                        <li><a href="https://x.com/anoma" target="_blank">Twitter</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>开发</h4>
+                    <ul>
+                        <li><a href="https://github.com/anoma/developer-docs" target="_blank">开发者指南</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Anoma中文开发者门户. 本网站为社区贡献项目，旨在为开发者提供Anoma生态资源。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
