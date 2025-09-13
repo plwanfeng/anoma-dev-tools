@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anoma Developer Tools - 下一代区块链开发平台</title>
+    <meta name="description" content="Anoma开发者工具 - 强大的区块链开发平台，提供智能合约开发、调试和部署工具">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- 背景效果 -->
+    <div class="background-effects">
+        <div class="neural-network"></div>
+        <div class="code-rain"></div>
+        <div class="floating-particles"></div>
+    </div>
+
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="iso.svg" alt="Anoma Logo" class="logo-icon">
+                <h2>Anoma 开发者工具</h2>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主页面 -->
+    <main>
+        <!-- 英雄区域 -->
+        <section id="home" class="hero-section">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <i class="fas fa-rocket"></i>
+                        <span>下一代区块链开发平台</span>
+                    </div>
+                    
+                    <h1 class="hero-title">
+                        <span class="title-line">构建未来的</span>
+                        <span class="title-line gradient-text">去中心化应用</span>
+                        <span class="title-line">从这里开始</span>
+                    </h1>
+                    
+                    <p class="hero-description">
+                        Anoma开发者工具提供完整的区块链开发生态系统，
+                        从智能合约编写到部署，让您的创意变为现实。
+                    </p>
+                    
+                    <div class="hero-actions">
+                        <button class="btn-primary btn-large">
+                            <i class="fas fa-play"></i>
+                            开始编码
+                        </button>
+                        <button class="btn-outline btn-large">
+                            <i class="fas fa-book"></i>
+                            查看文档
+                        </button>
+                    </div>
+                    
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">10K+</div>
+                            <div class="stat-label">开发者</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">500+</div>
+                            <div class="stat-label">项目</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">99.9%</div>
+                            <div class="stat-label">可用性</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hero-code">
+                    <div class="code-window">
+                        <div class="window-header">
+                            <div class="window-controls">
+                                <span class="control close"></span>
+                                <span class="control minimize"></span>
+                                <span class="control maximize"></span>
+                            </div>
+                            <div class="window-title">smart_contract.rs</div>
+                            <div class="window-actions">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="code-content">
+                            <div class="line-numbers"></div>
+                            <div class="code-text" id="hero-code"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 开发工具区域 -->
+        <section id="tools" class="tools-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">强大的开发工具</h2>
+                    <p class="section-description">一站式区块链开发解决方案</p>
+                </div>
+                
+                <div class="tools-grid">
+                    <div class="tool-card" data-tool="ide">
+                        <div class="tool-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>智能合约IDE</h3>
+                        <p>集成开发环境，支持Rust、Solidity等多种语言</p>
+                        <div class="tool-features">
+                            <span class="feature-tag">语法高亮</span>
+                            <span class="feature-tag">智能补全</span>
+                            <span class="feature-tag">实时调试</span>
+                        </div>
+                        <button class="tool-action-btn">启动IDE</button>
+                    </div>
+                    
+                    <div class="tool-card" data-tool="testing">
+                        <div class="tool-icon">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <h3>测试框架</h3>
+                        <p>完整的测试套件，确保代码质量和安全性</p>
+                        <div class="tool-features">
+                            <span class="feature-tag">单元测试</span>
+                            <span class="feature-tag">集成测试</span>
+                            <span class="feature-tag">性能测试</span>
+                        </div>
+                        <button class="tool-action-btn">运行测试</button>
+                    </div>
+                    
+                    <div class="tool-card" data-tool="deployment">
+                        <div class="tool-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h3>部署工具</h3>
+                        <p>一键部署到多个网络，支持自动化CI/CD</p>
+                        <div class="tool-features">
+                            <span class="feature-tag">多网络</span>
+                            <span class="feature-tag">自动化</span>
+                            <span class="feature-tag">监控</span>
+                        </div>
+                        <button class="tool-action-btn">开始部署</button>
+                    </div>
+                    
+                    <div class="tool-card" data-tool="analytics">
+                        <div class="tool-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>分析工具</h3>
+                        <p>深度分析合约性能，优化Gas消耗</p>
+                        <div class="tool-features">
+                            <span class="feature-tag">性能分析</span>
+                            <span class="feature-tag">Gas优化</span>
+                            <span class="feature-tag">安全审计</span>
+                        </div>
+                        <button class="tool-action-btn">开始分析</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 代码实验室 -->
+        <section id="playground" class="playground-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">代码实验室</h2>
+                    <p class="section-description">在线编写、测试和部署智能合约</p>
+                </div>
+                
+                <div class="playground-container">
+                    <div class="editor-panel">
+                        <div class="editor-header">
+                            <div class="editor-tabs">
+                                <div class="tab active" data-language="rust">
+                                    <i class="fab fa-rust"></i>
+                                    <span>Rust</span>
+                                </div>
+                                <div class="tab" data-language="solidity">
+                                    <i class="fab fa-ethereum"></i>
+                                    <span>Solidity</span>
+                                </div>
+                                <div class="tab" data-language="javascript">
+                                    <i class="fab fa-js"></i>
+                                    <span>JavaScript</span>
+                                </div>
+                            </div>
+                            <div class="editor-actions">
+                                <button class="btn-icon" title="运行代码">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <button class="btn-icon" title="保存">
+                                    <i class="fas fa-save"></i>
+                                </button>
+                                <button class="btn-icon" title="分享">
+                                    <i class="fas fa-share"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="editor-content">
+                            <div class="line-numbers" id="editor-line-numbers"></div>
+                            <div class="code-editor" id="code-editor" contenteditable="true"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="output-panel">
+                        <div class="output-header">
+                            <div class="output-tabs">
+                                <div class="tab active">控制台</div>
+                                <div class="tab">测试结果</div>
+                                <div class="tab">部署日志</div>
+                            </div>
+                        </div>
+                        
+                        <div class="output-content">
+                            <div class="console" id="console-output">
+                                <div class="console-line success">
+                                    <span class="timestamp">[14:32:15]</span>
+                                    <span class="message">✓ 编译成功</span>
+                                </div>
+                                <div class="console-line info">
+                                    <span class="timestamp">[14:32:16]</span>
+                                    <span class="message">正在运行测试...</span>
+                                </div>
+                                <div class="console-line success">
+                                    <span class="timestamp">[14:32:17]</span>
+                                    <span class="message">✓ 所有测试通过 (3/3)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 文档区域 -->
+        <section id="docs" class="docs-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">开发文档</h2>
+                    <p class="section-description">详细的API文档和教程指南</p>
+                </div>
+                
+                <div class="docs-grid">
+                    <div class="doc-card">
+                        <div class="doc-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h3>快速开始</h3>
+                        <p>5分钟快速上手Anoma开发</p>
+                        <a href="https://docs.anoma.net/getting-started" class="doc-link" target="_blank">
+                            开始学习 <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="doc-card">
+                        <div class="doc-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h3>API参考</h3>
+                        <p>完整的API文档和示例代码</p>
+                        <a href="https://docs.anoma.net/api" class="doc-link" target="_blank">
+                            查看文档 <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="doc-card">
+                        <div class="doc-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3>教程指南</h3>
+                        <p>从基础到高级的完整教程</p>
+                        <a href="https://docs.anoma.net/tutorials" class="doc-link" target="_blank">
+                            开始学习 <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="doc-card">
+                        <div class="doc-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3>最佳实践</h3>
+                        <p>行业最佳实践和设计模式</p>
+                        <a href="https://docs.anoma.net/best-practices" class="doc-link" target="_blank">
+                            了解更多 <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 社区区域 -->
+        <section id="community" class="community-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">加入开发者社区</h2>
+                    <p class="section-description">与全球开发者一起构建未来</p>
+                </div>
+                
+
+                
+                <div class="community-actions">
+                    <a href="https://discord.gg/anoma" target="_blank" class="btn-primary btn-large">
+                        <i class="fab fa-discord"></i>
+                        加入Discord
+                    </a>
+                    <a href="https://github.com/anoma" target="_blank" class="btn-outline btn-large">
+                        <i class="fab fa-github"></i>
+                        GitHub
+                    </a>
+                    <a href="https://twitter.com/anoma" target="_blank" class="btn-outline btn-large">
+                        <i class="fab fa-twitter"></i>
+                        Twitter
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <div class="logo-container">
+                            <div class="logo-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <span class="logo-text">Anoma<span class="accent">Dev</span></span>
+                        </div>
+                        <p>构建下一代去中心化应用的开发者平台</p>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>产品</h4>
+                    <ul>
+                        <li><a href="#tools" onclick="document.getElementById('tools').scrollIntoView({behavior: 'smooth'})">开发工具</a></li>
+                        <li><a href="#playground" onclick="document.getElementById('playground').scrollIntoView({behavior: 'smooth'})">代码实验室</a></li>
+
+                        <li><a href="https://docs.anoma.net/deployment" target="_blank">部署工具</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>资源</h4>
+                    <ul>
+                        <li><a href="https://docs.anoma.net" target="_blank">文档</a></li>
+                        <li><a href="https://docs.anoma.net/tutorials" target="_blank">教程</a></li>
+
+                        <li><a href="https://github.com/anoma/examples" target="_blank">示例代码</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>社区</h4>
+                    <ul>
+                        <li><a href="https://discord.gg/anoma" target="_blank">Discord</a></li>
+                        <li><a href="https://github.com/anoma" target="_blank">GitHub</a></li>
+                        <li><a href="https://twitter.com/anoma" target="_blank">Twitter</a></li>
+                        <li><a href="https://blog.anoma.net" target="_blank">博客</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Anoma Developer Tools. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">隐私政策</a>
+                    <a href="#">服务条款</a>
+                    <a href="#">联系我们</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
